@@ -1,13 +1,20 @@
 <!DOCTYPE HTML>
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Messages</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
 <div>
-    <form method="post" action="addMessage">
+    <form action="/logout" method="post">
+        <input type="submit" value="Sign Out"/>
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    </form>
+</div>
+<div>
+    <form method="post" action="/addMessage">
         <input type="text" name="text" placeholder="уведіть повідомлення">
         <input type="text" name="tag" placeholder="тег">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
         <button type="submit">добавити</button>
     </form>
 </div>
@@ -15,8 +22,9 @@
 <br><br>
 
 <div>список повідомлень:</div>
-<form method="post" action="filter">
+<form method="post" action="/filter">
     <input type="text" name="filter">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
     <button type="submit">знайти</button>
 </form>
 {{#messages}}
