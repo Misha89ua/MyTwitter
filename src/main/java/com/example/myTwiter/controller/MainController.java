@@ -1,8 +1,10 @@
 package com.example.myTwiter.controller;
 
 import com.example.myTwiter.entity.Message;
+import com.example.myTwiter.entity.User;
 import com.example.myTwiter.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +34,11 @@ public class MainController {
     }
 
     @PostMapping("/addMessage")
-    public String addMessages(@RequestParam String text, @RequestParam String tag, Map<String, Object> model){
-        Message message = new Message(text, tag);
+    public String addMessages(
+            @AuthenticationPrincipal User user,
+            @RequestParam String text,
+            @RequestParam String tag, Map<String, Object> model){
+        Message message = new Message(text, tag, user);
         if (message.getText().isEmpty()){
             message.setText("пусте повідомлення");
         }
