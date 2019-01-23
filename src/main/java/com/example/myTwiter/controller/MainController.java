@@ -21,9 +21,15 @@ public class MainController {
     private MessageRepo messageRepo;
 
     @GetMapping("/messages")
-    public String messages(Map<String, Object> model) {
-       Iterable<Message> messages = messageRepo.findAll();
-       model.put("messages", messages);
+    public String messages(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+        Iterable<Message> messages;
+        if(filter != null && !filter.isEmpty()) {
+            messages = messageRepo.findByTag(filter);
+        }else {
+            messages = messageRepo.findAll();
+        }
+        model.addAttribute("messages", messages);
+        model.addAttribute("filter", filter);
         return "messages";
     }
 
@@ -37,7 +43,9 @@ public class MainController {
     public String addMessages(
             @AuthenticationPrincipal User user,
             @RequestParam String text,
-            @RequestParam String tag, Map<String, Object> model){
+            @RequestParam String tag,
+            @RequestParam(required = false, defaultValue = "") String filter,
+            Model model){
         Message message = new Message(text, tag, user);
         if (message.getText().isEmpty()){
             message.setText("пусте повідомлення");
@@ -47,19 +55,9 @@ public class MainController {
         }
         messageRepo.save(message);
         Iterable<Message> messages = messageRepo.findAll();
-        model.put("messages", messages);
+        model.addAttribute("messages", messages);
+        model.addAttribute("filter", filter);
         return "messages";
     }
 
-    @PostMapping("/filter")
-    public String filter(@RequestParam String filter, Map<String, Object> model){
-        Iterable <Message> messages;
-        if(filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
-        }else {
-            messages = messageRepo.findAll();
-        }
-        model.put("messages", messages);
-        return "messages";
-    }
 }

@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home page</title>
-</head>
-<body>
+<#import "parts/common.ftl" as c>
 
+<@c.page>
 <h1 align="center">Привіт Юзер!</h1>
 <br><br><br>
 <h4 align="center"><a href="/messages">перейти на торінку повідомлень</a></h4>
-
-</body>
-</html>
+</@c.page>
